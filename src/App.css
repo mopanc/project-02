@@ -11,6 +11,9 @@
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
+  .reverse {
+    animation: App-logo-spin-reverse infinite 20s linear;
+  }
 }
 
 .App-header {
@@ -35,4 +38,25 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+@keyframes App-logo-spin-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+.reverseClass {
+  font-size: 0.7em;
+  width: 190px;
+  margin-top: 50px;
+  color: #282c34;
+  padding: 10px 60px;
+  border: none;
+  border-radius: 10px;
+  background-color: #67dbf9;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 }
