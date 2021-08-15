@@ -1,6 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+const eventfn = () => {
+  console.log('likes clicados');
+};
 
 function App() {
   //const { reverse } = this.state;
@@ -10,12 +14,32 @@ function App() {
 
   const handleClick = () => {
     //this.setState({ reverse: !reverse });
-    setReverse(!reverse);
+    setReverse((reverse) => !reverse);
   };
 
   const handleIncrement = () => {
-    setCounter(counter + 1);
+    setCounter((prevCounter) => prevCounter + 1); //setState com calback, o prev counter foi adicionado como calback para nao usar o count diretametnte
   };
+  //componentDidUpdate - executa toda vez que o componente atualiza
+  useEffect(() => {
+    console.log('ComponentDidUpdate');
+  });
+  //componentDidMount - executa uma vez porque esta sem dependencia, tem a array vazia
+  useEffect(() => {
+    console.log('ComponentDidMount');
+  }, []);
+  //componentDidMount - executa sempore que a dependencia mudar
+  useEffect(() => {
+    console.log('likes mudou para', counter);
+  }, [counter]);
+  //neste caso estamos chamando um eventlistner cada vez que clicarmos no h1, mas cuidado com o lixo que fica na pagina porque sempre que alguma coisa mudar ele soma eventlister
+  useEffect(() => {
+    document.querySelector('h1')?.addEventListener('click', eventfn);
+    //componentWillUmount
+    return () => {
+      document.querySelector('h1')?.removeEventListener('click', eventfn);
+    };
+  }, []);
 
   return (
     <div className="App">
