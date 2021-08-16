@@ -1,6 +1,22 @@
 import logo from './logo.svg';
+import P from 'prop-types';
 import './App.css';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+//criando o component button com prop aqui esta no mesmo arquivo mas em um caso real será para colocar em outros arquivos
+const Button = React.memo(function Button({ incrementButton }) {
+  return (
+    console.log('Filho renderizou'),
+    (
+      <button onClick={() => incrementButton(10)} type="button" className="reverseClass">
+        Like
+      </button>
+    )
+  );
+});
+
+Button.propTypes = {
+  incrementButton: P.func,
+};
 
 const eventfn = () => {
   console.log('likes clicados');
@@ -17,29 +33,36 @@ function App() {
     setReverse((reverse) => !reverse);
   };
 
-  const handleIncrement = () => {
-    setCounter((prevCounter) => prevCounter + 1); //setState com calback, o prev counter foi adicionado como calback para nao usar o count diretametnte
-  };
+  const handleIncrement = useCallback((num) => {
+    setCounter((prevCounter) => prevCounter + num); //setState com calback, o prev counter foi adicionado como calback para nao usar o count diretametnte
+  }, []);
+
   //componentDidUpdate - executa toda vez que o componente atualiza
   useEffect(() => {
     console.log('ComponentDidUpdate');
   });
+
   //componentDidMount - executa uma vez porque esta sem dependencia, tem a array vazia
   useEffect(() => {
     console.log('ComponentDidMount');
   }, []);
+
   //componentDidMount - executa sempore que a dependencia mudar
   useEffect(() => {
     console.log('likes mudou para', counter);
   }, [counter]);
+
   //neste caso estamos chamando um eventlistner cada vez que clicarmos no h1, mas cuidado com o lixo que fica na pagina porque sempre que alguma coisa mudar ele soma eventlister
   useEffect(() => {
     document.querySelector('h1')?.addEventListener('click', eventfn);
+
     //componentWillUmount
     return () => {
       document.querySelector('h1')?.removeEventListener('click', eventfn);
     };
   }, []);
+
+  console.log('Pai renderizou');
 
   return (
     <div className="App">
@@ -51,9 +74,7 @@ function App() {
           <button type="button" className="reverseClass" onClick={handleClick}>
             Reverse
           </button>{' '}
-          <button type="button" className="reverseClass" onClick={handleIncrement}>
-            like
-          </button>
+          <Button incrementButton={handleIncrement} />
         </p>
       </header>
     </div>
